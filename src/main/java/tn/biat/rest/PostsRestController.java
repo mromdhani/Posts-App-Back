@@ -4,9 +4,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import tn.biat.domain.Post;
@@ -28,5 +32,19 @@ public class PostsRestController {
 	public List<Post> findAll() {
 		return  new ArrayList<Post>(data.values()) ;
 	}
+	
+	@GetMapping(path="/api/posts/{id}")
+	public ResponseEntity<Post> findbBId(@PathVariable int id) {
+		Optional<Post>  resultat = data.values().stream().filter(p -> p.getId()==id).findFirst();
+		if (resultat.isPresent()) {
+			return new ResponseEntity<Post>(resultat.get(), HttpStatus.OK);
+		} else
+			return new ResponseEntity(HttpStatus.NOT_FOUND);
+		
+		
+	}
+	
+	
+	
 
 }
